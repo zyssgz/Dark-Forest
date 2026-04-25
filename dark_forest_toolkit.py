@@ -24,7 +24,7 @@ class DarkForestToolkit:
     """黑暗森林工具箱主类"""
     
     def __init__(self):
-        self.version = "1.0.0"
+        self.version = "1.1.0"
         self.name = "黑暗森林工具箱"
         self.tools = {
             "1": ("系统信息查看", self.show_system_info),
@@ -41,7 +41,8 @@ class DarkForestToolkit:
             "12": ("环境变量查看", self.env_viewer),
             "13": ("剪贴板历史(模拟)", self.clipboard_sim),
             "14": ("快速清理临时文件", self.cleanup_temp),
-            "15": ("退出", self.exit_toolkit),
+            "15": ("Windows内置工具一键启动", self.windows_builtin_tools),
+            "16": ("退出", self.exit_toolkit),
         }
     
     def clear_screen(self):
@@ -695,6 +696,73 @@ class DarkForestToolkit:
             print(f"  释放空间：{total_size / (1024*1024):.2f} MB")
         else:
             print("操作已取消")
+    
+    def windows_builtin_tools(self):
+        """Windows内置工具一键启动"""
+        print("\n🪟 Windows内置工具一键启动")
+        print("─" * 50)
+        
+        if os.name != 'nt':
+            print("⚠️  此功能仅在Windows系统下可用")
+            input("\n按回车键返回主菜单...")
+            return
+        
+        tools = [
+            ("1", "设备管理器", "devmgmt.msc"),
+            ("2", "磁盘管理", "diskmgmt.msc"),
+            ("3", "事件查看器", "eventvwr.msc"),
+            ("4", "服务管理器", "services.msc"),
+            ("5", "任务计划程序", "taskschd.msc"),
+            ("6", "注册表编辑器", "regedit.exe"),
+            ("7", "组策略编辑器", "gpedit.msc"),
+            ("8", "计算机管理", "compmgmt.msc"),
+            ("9", "性能监视器", "perfmon.msc"),
+            ("10", "资源监视器", "resmon.exe"),
+            ("11", "系统配置", "msconfig.exe"),
+            ("12", "DirectX诊断工具", "dxdiag.exe"),
+            ("13", "系统信息", "msinfo32.exe"),
+            ("14", "控制面板", "control.exe"),
+            ("15", "电源选项", "powercfg.cpl"),
+            ("16", "网络连接", "ncpa.cpl"),
+            ("17", "程序和功能", "appwiz.cpl"),
+            ("18", "用户账户", "netplwiz"),
+            ("19", "本地安全策略", "secpol.msc"),
+            ("20", "Windows防火墙", "firewall.cpl"),
+            ("21", "返回主菜单", None),
+        ]
+        
+        while True:
+            print("\n可用工具:")
+            for key, name, _ in tools:
+                if key == "21":
+                    print(f"  [{key}] {name}")
+                else:
+                    print(f"  [{key}] {name}")
+            
+            choice = input("\n请选择要打开的工具 (输入编号): ").strip()
+            
+            if choice == "21":
+                break
+            
+            # 查找对应的工具
+            selected_tool = None
+            for key, name, cmd in tools:
+                if key == choice:
+                    selected_tool = (name, cmd)
+                    break
+            
+            if selected_tool:
+                name, cmd = selected_tool
+                print(f"\n🚀 正在启动 {name}...")
+                try:
+                    subprocess.Popen(cmd, shell=True)
+                    print("✅ 已启动，窗口可能在后台，请检查任务栏")
+                except Exception as e:
+                    print(f"❌ 启动失败：{e}")
+                
+                input("\n按回车键继续...")
+            else:
+                print("❌ 无效的选择，请重新输入")
 
 
 def main():
