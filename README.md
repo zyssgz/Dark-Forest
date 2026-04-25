@@ -37,7 +37,7 @@
 
 ### 使用方法
 
-#### 直接运行
+#### 方式一：直接运行（需要Python环境）
 ```bash
 python dark_forest_toolkit.py
 ```
@@ -46,6 +46,32 @@ python dark_forest_toolkit.py
 ```bash
 ./dark_forest_toolkit.py
 ```
+
+#### 方式二：使用可执行文件（推荐新手）
+**Windows用户：**
+1. 双击运行 `build.bat` 脚本
+2. 等待打包完成
+3. 在 `Release` 文件夹中找到 `DarkForestToolkit.exe`
+4. 双击即可运行，无需安装Python！
+
+**Linux/Mac用户：**
+```bash
+# 安装依赖
+pip install pyinstaller
+
+# 打包
+pyinstaller --onefile --name "DarkForestToolkit" dark_forest_toolkit.py
+
+# 运行
+./dist/DarkForestToolkit
+```
+
+#### 自动打包说明
+每次修改代码后，只需运行对应的构建脚本即可自动生成单一可执行文件：
+- **Windows**: 双击 `build.bat`
+- **Linux/Mac**: 运行 `chmod +x build.sh && ./build.sh`
+
+打包完成后，可执行文件将保存在 `Release` 文件夹中。
 
 #### 依赖安装（可选）
 部分功能需要 `psutil` 库以获取更详细的系统信息：
@@ -57,8 +83,20 @@ pip install psutil
 - ✅ 跨平台支持（Windows/Linux/Mac）
 - ✅ 纯Python实现，无需额外依赖（基础功能）
 - ✅ 交互式菜单，简单易用
+- ✅ **自动打包**：修改代码后一键生成单一可执行文件
 - ✅ 适合不熟悉命令行的用户
 - ✅ 持续更新更多实用工具
+
+### 项目结构
+```
+Dark-Forest/
+├── dark_forest_toolkit.py    # 主程序源代码
+├── build.bat                 # Windows自动打包脚本
+├── build.sh                  # Linux/Mac自动打包脚本
+├── Release/                  # 打包输出的可执行文件
+│   └── DarkForestToolkit     # (Linux/Mac) 或 DarkForestToolkit.exe (Windows)
+└── README.md                 # 使用说明
+```
 
 ### 注意事项
 - 部分功能（如结束进程、清理文件）需要谨慎使用
