@@ -21,7 +21,7 @@ from typing import Optional, List, Dict, Any
 
 
 class DarkForestToolkit:
-    """Dark Forest Toolkit main class"""
+    """黑暗森林工具箱主类"""
     
     def __init__(self):
         self.version = "2.0.0"
@@ -52,17 +52,17 @@ class DarkForestToolkit:
         }
     
     def clear_screen(self):
-        """Clear screen"""
+        """清屏"""
         os.system('cls' if os.name == 'nt' else 'clear')
     
     def show_banner(self):
-        """Show banner"""
+        """显示横幅"""
         banner = """
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
 ║              🌲 黑暗森林工具箱 v{} 🌲                     ║
 ║                                                          ║
-║     Practical tools for explorers                            ║
+║     为探索者准备的实用工具集合                            ║
 ║     Dark Forest Toolkit for Explorers                    ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
@@ -70,7 +70,7 @@ class DarkForestToolkit:
         print(banner)
     
     def show_menu(self):
-        """Show menu"""
+        """显示菜单"""
         print("\n📋 可用工具:")
         print("─" * 50)
         for key, (name, _) in sorted(self.tools.items(), key=lambda x: int(x[0]) if x[0].isdigit() else 999):
@@ -78,7 +78,7 @@ class DarkForestToolkit:
         print("─" * 50)
     
     def run(self):
-        """Run the toolkit"""
+        """运行工具箱"""
         while True:
             self.clear_screen()
             self.show_banner()
@@ -92,7 +92,7 @@ class DarkForestToolkit:
                     if choice != "15":
                         input("\n按回车键继续...")
                 except KeyboardInterrupt:
-                    print("\nOperation cancelled")
+                    print("\n操作已取消")
                     input("\n按回车键继续...")
                 except Exception as e:
                     print(f"\n❌ 错误: {str(e)}")
@@ -102,19 +102,19 @@ class DarkForestToolkit:
                 input("\n按回车键继续...")
     
     def exit_toolkit(self):
-        """Exit the toolkit"""
+        """退出工具箱"""
         print("\n👋 感谢使用黑暗森林工具箱！再见！")
         sys.exit(0)
     
-    # ==================== Tool Implementations ====================
+    # ==================== 工具实现 ====================
     
     def show_system_info(self):
-        """Display system information"""
+        """显示系统信息"""
         print("\n💻 系统信息")
         print("─" * 50)
         
         try:
-            # Get system information using Python
+            # 使用Python获取系统信息
             import platform
             import socket
             
@@ -125,17 +125,17 @@ class DarkForestToolkit:
             print(f"主机名：{socket.gethostname()}")
             print(f"Python版本：{platform.python_version()}")
             
-            # Try to get more information
+            # 尝试获取更多信息
             if os.name == 'nt':
-                # Windows-specific information
+                # Windows特定信息
                 result = subprocess.run(['systeminfo'], capture_output=True, text=True, timeout=10)
                 if result.returncode == 0:
                     lines = result.stdout.split('\n')
-                    for line in lines[:15]:  # Only show first 15 lines
+                    for line in lines[:15]:  # 只显示前15行
                         if ':' in line:
                             print(line.strip())
             
-            # Memory information
+            # 内存信息
             import psutil
             mem = psutil.virtual_memory()
             print(f"\n内存总计：{mem.total / (1024**3):.2f} GB")
@@ -144,12 +144,12 @@ class DarkForestToolkit:
             
         except ImportError:
             print("psutil未安装，部分信息不可用")
-            print("Installation: pip install psutil")
+            print("安装方法：pip install psutil")
         except Exception as e:
-            print(f"Error getting system information：{e}")
+            print(f"获取系统信息时出错：{e}")
     
     def network_tools(self):
-        """Network tools"""
+        """网络工具集"""
         print("\n🌐 网络工具集")
         print("─" * 50)
         print("  1. Ping测试")
@@ -190,7 +190,7 @@ class DarkForestToolkit:
                 print(f"\n正在扫描 {target} 的端口 {start}-{end}...")
                 
                 open_ports = []
-                for port in range(start, min(end + 1, start + 50)):  # Limit scan quantity
+                for port in range(start, min(end + 1, start + 50)):  # 限制扫描数量
                     import socket
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.settimeout(0.5)
@@ -204,17 +204,17 @@ class DarkForestToolkit:
                 else:
                     print("\n未发现开放端口")
             except Exception as e:
-                print(f"Port scan failed：{e}")
+                print(f"端口扫描失败：{e}")
     
     def batch_rename(self):
-        """Batch rename files"""
+        """批量重命名文件"""
         print("\n📁 批量重命名工具")
         print("─" * 50)
         
         folder = input("输入文件夹路径 (默认: 当前目录): ").strip() or "."
         
         if not os.path.exists(folder):
-            print("❌ Folder does not exist")
+            print("❌ 文件夹不存在")
             return
         
         pattern = input("输入文件名模式 (例如: file_001): ").strip() or "file_{:03d}"
@@ -224,17 +224,17 @@ class DarkForestToolkit:
             files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
             files.sort()
             
-            print(f"\nFound {len(files)}  files")
-            print("Preview rename results:")
+            print(f"\n找到 {len(files)} 个文件")
+            print("预览重命名结果:")
             
             for i, old_name in enumerate(files[:10], 1):
                 new_name = pattern.format(i) + ext
                 print(f"  {old_name} -> {new_name}")
             
             if len(files) > 10:
-                print(f"  ... ... and {len(files) - 10}  files")
+                print(f"  ... 还有 {len(files) - 10} 个文件")
             
-            confirm = input("\nConfirm execution?(y/n): ").strip().lower()
+            confirm = input("\n确认执行？(y/n): ").strip().lower()
             if confirm == 'y':
                 for i, old_name in enumerate(files, 1):
                     old_path = os.path.join(folder, old_name)
@@ -245,15 +245,15 @@ class DarkForestToolkit:
                         os.rename(old_path, new_path)
                         print(f"✓ {old_name} -> {new_name}")
                 
-                print("\n✅ Rename completed!")
+                print("\n✅ 重命名完成!")
             else:
-                print("Operation cancelled")
+                print("操作已取消")
         
         except Exception as e:
-            print(f"❌ Rename failed：{e}")
+            print(f"❌ 重命名失败：{e}")
     
     def text_crypto(self):
-        """Text encryption/decryption"""
+        """文本加密/解密"""
         print("\n🔐 文本加密/解密")
         print("─" * 50)
         print("  1. Caesar加密")
@@ -295,7 +295,7 @@ class DarkForestToolkit:
             print("提示：使用相同的密钥再次运行可解密")
     
     def password_generator(self):
-        """Password generator"""
+        """密码生成器"""
         print("\n🔑 密码生成器")
         print("─" * 50)
         
@@ -382,8 +382,8 @@ class DarkForestToolkit:
             print(f"❌ 操作失败：{e}")
     
     def hash_calculator(self):
-        """Hash calculator"""
-        print("\n# Hash Calculator")
+        """哈希计算器"""
+        print("\n#️⃣ 哈希计算器")
         print("─" * 50)
         print("  1. MD5")
         print("  2. SHA1")
@@ -439,7 +439,7 @@ class DarkForestToolkit:
                 print(f"❌ 计算失败：{e}")
     
     def timestamp_converter(self):
-        """Timestamp converter"""
+        """时间戳转换"""
         print("\n⏰ 时间戳转换器")
         print("─" * 50)
         print("  1. 时间戳 -> 日期时间")
@@ -476,7 +476,7 @@ class DarkForestToolkit:
             print(f"❌ 转换失败：{e}")
     
     def process_manager(self):
-        """Process manager"""
+        """进程管理"""
         print("\n⚙️ 进程管理")
         print("─" * 50)
         print("  1. 查看进程列表")
@@ -492,7 +492,7 @@ class DarkForestToolkit:
                 else:
                     result = subprocess.run(['ps', 'aux'], capture_output=True, text=True)
                 print("\n进程列表:")
-                print(result.stdout[:2000])  # Limit output length
+                print(result.stdout[:2000])  # 限制输出长度
             
             elif choice == "2":
                 keyword = input("输入进程名关键词: ").strip()
@@ -505,11 +505,11 @@ class DarkForestToolkit:
                 matched = [line for line in lines if keyword.lower() in line.lower()]
                 
                 if matched:
-                    print(f"\nFound {len(matched)} 个匹配进程:")
+                    print(f"\n找到 {len(matched)} 个匹配进程:")
                     for line in matched[:20]:
                         print(line)
                 else:
-                    print("\n未Found匹配进程")
+                    print("\n未找到匹配进程")
             
             elif choice == "3":
                 pid = input("输入进程ID (PID): ").strip()
@@ -522,13 +522,13 @@ class DarkForestToolkit:
                         subprocess.run(['kill', '-9', pid])
                     print("✅ 进程已结束")
                 else:
-                    print("Operation cancelled")
+                    print("操作已取消")
         
         except Exception as e:
             print(f"❌ 操作失败：{e}")
     
     def disk_analyzer(self):
-        """Disk space analyzer"""
+        """磁盘空间分析"""
         print("\n💾 磁盘空间分析")
         print("─" * 50)
         
@@ -576,7 +576,7 @@ class DarkForestToolkit:
                 print(result.stdout)
     
     def env_viewer(self):
-        """Environment variable viewer"""
+        """环境变量查看"""
         print("\n🔧 环境变量查看")
         print("─" * 50)
         
@@ -592,10 +592,10 @@ class DarkForestToolkit:
                 for key, value in matched.items():
                     print(f"  {key}={value}")
             else:
-                print("\n未Found匹配的环境变量")
+                print("\n未找到匹配的环境变量")
     
     def clipboard_sim(self):
-        """Clipboard history simulation"""
+        """剪贴板历史模拟"""
         print("\n📋 剪贴板工具")
         print("─" * 50)
         
@@ -621,7 +621,7 @@ class DarkForestToolkit:
                         process = subprocess.Popen(['wl-copy'], stdin=subprocess.PIPE)
                         process.communicate(text.encode('utf-8'))
                     else:
-                        print("未Found剪贴板工具，请安装 xclip 或 wl-copy")
+                        print("未找到剪贴板工具，请安装 xclip 或 wl-copy")
                         return
                 
                 print("✅ 已复制到剪贴板")
@@ -640,27 +640,27 @@ class DarkForestToolkit:
                         result = subprocess.run(['wl-paste'], capture_output=True, text=True)
                         print(f"\n剪贴板内容:\n{result.stdout}")
                     else:
-                        print("未Found剪贴板工具")
+                        print("未找到剪贴板工具")
         
         except Exception as e:
             print(f"❌ 操作失败：{e}")
     
     def cleanup_temp(self):
-        """Clean up temporary files"""
+        """清理临时文件"""
         print("\n🧹 清理临时文件")
         print("─" * 50)
         
         temp_dirs = []
         
         if os.name == 'nt':
-            # Windows temporary directory
+            # Windows临时目录
             temp_dirs = [
                 os.environ.get('TEMP', ''),
                 os.environ.get('TMP', ''),
                 r'C:\Windows\Temp',
             ]
         else:
-            # Linux/Mac temporary directory
+            # Linux/Mac临时目录
             temp_dirs = ['/tmp', '/var/tmp']
         
         temp_dirs = [d for d in temp_dirs if d and os.path.exists(d)]
@@ -701,7 +701,7 @@ class DarkForestToolkit:
             print(f"  删除文件数：{total_cleaned}")
             print(f"  释放空间：{total_size / (1024*1024):.2f} MB")
         else:
-            print("Operation cancelled")
+            print("操作已取消")
     
     def windows_builtin_tools(self):
         """Windows内置工具一键启动"""
@@ -750,7 +750,7 @@ class DarkForestToolkit:
             if choice == "21":
                 break
             
-            # Find corresponding tool
+            # 查找对应的工具
             selected_tool = None
             for key, name, cmd in tools:
                 if key == choice:
@@ -770,7 +770,7 @@ class DarkForestToolkit:
             else:
                 print("❌ 无效的选择，请重新输入")
 
-    # ==================== New Tool Implementations ====================
+    # ==================== 新增工具实现 ====================
 
     def qr_generator(self):
         """QR码生成器"""
@@ -782,16 +782,16 @@ class DarkForestToolkit:
             print("❌ 内容不能为空")
             return
         
-        # Generate QR code simulation using simple ASCII art
+        # 使用简单的 ASCII 艺术生成 QR 码模拟
         print("\n生成的 QR 码 (ASCII 艺术版):")
         print("┌" + "─" * 40 + "┐")
         
-        # Generate simple pattern to simulate QR code
+        # 生成简单的图案模拟 QR 码
         random.seed(hash(data) % (2**32))
         for i in range(15):
             line = "│ "
             for j in range(40):
-                # Positioning pattern
+                # 定位图案
                 if (i < 5 and j < 5) or (i < 5 and j > 34) or (i > 9 and j < 5):
                     line += "█" if (i % 2 == 0 or j % 2 == 0) else " "
                 else:
@@ -804,7 +804,7 @@ class DarkForestToolkit:
         print("\n提示：如需真实 QR 码图片，可安装 qrcode 库:")
         print("      pip install qrcode[pil]")
         
-        # Check if qrcode library is installed
+        # 检查是否安装了 qrcode 库
         try:
             import qrcode
             save_img = input("\n检测到 qrcode 库，是否保存为图片？(y/n): ").strip().lower()
@@ -823,7 +823,7 @@ class DarkForestToolkit:
             pass
 
     def color_converter(self):
-        """Color code converter"""
+        """颜色代码转换器"""
         print("\n🎨 颜色代码转换器")
         print("─" * 50)
         print("  1. HEX -> RGB")
@@ -843,7 +843,7 @@ class DarkForestToolkit:
                 b = int(hex_color[4:6], 16)
                 print(f"\nRGB 值：({r}, {g}, {b})")
                 
-                # Display color bar
+                # 显示颜色条
                 print(f"\n颜色预览：\033[48;2;{r};{g};{b}m          \033[0m")
             else:
                 print("❌ 无效的 HEX 格式，应为 6 位十六进制数")
@@ -883,7 +883,7 @@ class DarkForestToolkit:
                 print(f"  \033[48;2;{r};{g};{b}m   \033[0m {name}: {hex_val} RGB{rgb_val}")
 
     def text_statistics(self):
-        """Text statistics tool"""
+        """文本统计工具"""
         print("\n📊 文本统计工具")
         print("─" * 50)
         
@@ -901,22 +901,22 @@ class DarkForestToolkit:
             print("❌ 文本为空")
             return
         
-        # Statistics
+        # 统计信息
         char_count = len(text)
         char_no_space = len(text.replace(' ', '').replace('\n', '').replace('\t', ''))
         word_count = len(text.split())
         line_count = len(lines)
         
-        # Chinese character count
+        # 中文统计
         chinese_chars = len([c for c in text if '\u4e00' <= c <= '\u9fff'])
         
-        # English word count
+        # 英文统计
         english_words = len([w for w in text.split() if w.isalpha()])
         
-        # Digit count
+        # 数字统计
         digit_count = len([c for c in text if c.isdigit()])
         
-        # Punctuation count
+        # 标点符号统计
         punctuation = '.,!?;:,.!?.!?、。！？；："'
         punct_count = len([c for c in text if c in punctuation])
         
@@ -930,12 +930,12 @@ class DarkForestToolkit:
         print(f"  数字个数：{digit_count}")
         print(f"  标点符号数：{punct_count}")
         
-        # Average word length
+        # 平均词长
         if word_count > 0:
             avg_word_len = char_no_space / word_count
             print(f"  平均词长：{avg_word_len:.2f}")
         
-        # Frequency analysis
+        # 频率分析
         freq_show = input("\n显示字符频率分析？(y/n): ").strip().lower()
         if freq_show == 'y':
             from collections import Counter
@@ -949,7 +949,7 @@ class DarkForestToolkit:
                 print(f"  {display_char}: {bar} ({count})")
 
     def random_data_generator(self):
-        """Random data generator"""
+        """随机数据生成器"""
         print("\n🎲 随机数据生成器")
         print("─" * 50)
         print("  1. 随机整数")
@@ -997,7 +997,7 @@ class DarkForestToolkit:
                 for _ in range(count):
                     year = random.randint(start_year, end_year)
                     month = random.randint(1, 12)
-                    day = random.randint(1, 28)  # Simplified handling
+                    day = random.randint(1, 28)  # 简化处理
                     hour = random.randint(0, 23)
                     minute = random.randint(0, 59)
                     second = random.randint(0, 59)
@@ -1022,7 +1022,7 @@ class DarkForestToolkit:
             print(f"❌ 生成失败：{e}")
 
     def file_info_viewer(self):
-        """File information viewer"""
+        """文件信息查看器"""
         print("\n📄 文件信息查看器")
         print("─" * 50)
         
@@ -1044,7 +1044,7 @@ class DarkForestToolkit:
             print(f"  文件名：{os.path.basename(filepath)}")
             print(f"  文件大小：{stat_info.st_size:,} 字节 ({stat_info.st_size / 1024:.2f} KB)")
             
-            # Time information
+            # 时间信息
             created = datetime.datetime.fromtimestamp(stat_info.st_ctime)
             modified = datetime.datetime.fromtimestamp(stat_info.st_mtime)
             accessed = datetime.datetime.fromtimestamp(stat_info.st_atime)
@@ -1053,7 +1053,7 @@ class DarkForestToolkit:
             print(f"  修改时间：{modified.strftime('%Y-%m-%d %H:%M:%S')}")
             print(f"  访问时间：{accessed.strftime('%Y-%m-%d %H:%M:%S')}")
             
-            # File permissions
+            # 文件权限
             import stat
             mode = stat_info.st_mode
             perms = []
@@ -1062,11 +1062,11 @@ class DarkForestToolkit:
             perms.append('x' if mode & stat.S_IXUSR else '-')
             print(f"  权限：{''.join(perms)} (所有者)")
             
-            # File extension
+            # 文件扩展名
             ext = os.path.splitext(filepath)[1].lower()
             print(f"  扩展名：{ext}")
             
-            # MIME type estimation
+            # MIME 类型推测
             mime_types = {
                 '.txt': 'text/plain',
                 '.pdf': 'application/pdf',
@@ -1085,7 +1085,7 @@ class DarkForestToolkit:
             mime = mime_types.get(ext, 'unknown')
             print(f"  MIME 类型：{mime}")
             
-            # Calculate hash
+            # 计算哈希
             calc_hash = input("\n计算文件哈希？(y/n): ").strip().lower()
             if calc_hash == 'y':
                 print("\n正在计算哈希...")
@@ -1107,7 +1107,7 @@ class DarkForestToolkit:
             print(f"❌ 获取文件信息失败：{e}")
 
     def network_speed_test(self):
-        """Network speed test"""
+        """网络速度测试"""
         print("\n🚀 网络速度测试")
         print("─" * 50)
         
@@ -1126,14 +1126,14 @@ class DarkForestToolkit:
                 start_time = datetime.datetime.now()
                 
                 import socket
-                # Extract hostname
+                # 提取主机名
                 hostname = url.replace('https://', '').replace('http://', '')
                 
-                # DNS resolution time
+                # DNS 解析时间
                 socket.gethostbyname(hostname)
                 dns_time = (datetime.datetime.now() - start_time).total_seconds() * 1000
                 
-                # TCP connection test
+                # TCP 连接测试
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(5)
                 port = 443 if 'https' in url else 80
@@ -1169,7 +1169,7 @@ class DarkForestToolkit:
 
 
 def main():
-    """Main function"""
+    """主函数"""
     toolkit = DarkForestToolkit()
     toolkit.run()
 
