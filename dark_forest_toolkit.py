@@ -24,7 +24,7 @@ class DarkForestToolkit:
     """Dark Forest Toolkit main class"""
     
     def __init__(self):
-        self.version = "2.0.0"
+        self.version = "2.1.0"
         self.name = "黑暗森林工具箱"
         self.tools = {
             "1": ("系统信息查看", self.show_system_info),
@@ -32,23 +32,28 @@ class DarkForestToolkit:
             "3": ("文件批量重命名", self.batch_rename),
             "4": ("文本加密/解密", self.text_crypto),
             "5": ("密码生成器", self.password_generator),
-            "6": ("JSON格式化", self.json_formatter),
-            "7": ("Base64编解码", self.base64_codec),
+            "6": ("JSON 格式化", self.json_formatter),
+            "7": ("Base64 编解码", self.base64_codec),
             "8": ("哈希计算器", self.hash_calculator),
             "9": ("时间戳转换", self.timestamp_converter),
             "10": ("进程管理", self.process_manager),
             "11": ("磁盘空间分析", self.disk_analyzer),
             "12": ("环境变量查看", self.env_viewer),
-            "13": ("剪贴板历史(模拟)", self.clipboard_sim),
+            "13": ("剪贴板历史 (模拟)", self.clipboard_sim),
             "14": ("快速清理临时文件", self.cleanup_temp),
-            "15": ("Windows内置工具一键启动", self.windows_builtin_tools),
-            "16": ("QR码生成器", self.qr_generator),
+            "15": ("Windows 内置工具一键启动", self.windows_builtin_tools),
+            "16": ("QR 码生成器", self.qr_generator),
             "17": ("颜色代码转换器", self.color_converter),
             "18": ("文本统计工具", self.text_statistics),
             "19": ("随机数据生成器", self.random_data_generator),
             "20": ("文件信息查看器", self.file_info_viewer),
             "21": ("网络速度测试", self.network_speed_test),
-            "22": ("退出", self.exit_toolkit),
+            "22": ("待办事项管理器", self.todo_manager),
+            "23": ("单位转换器", self.unit_converter),
+            "24": ("正则表达式测试", self.regex_tester),
+            "25": ("文件分割与合并", self.file_splitter_merger),
+            "26": ("系统资源监控", self.system_monitor),
+            "27": ("退出", self.exit_toolkit),
         }
     
     def clear_screen(self):
@@ -1166,6 +1171,354 @@ class DarkForestToolkit:
         print("  - DNS 延迟越低，域名解析越快")
         print("  - 连接延迟越低，网络连接响应越快")
         print("  - 如需更精确的网速测试，建议使用专业测速网站")
+
+
+    def todo_manager(self):
+        """待办事项管理器"""
+        print("\n📝 待办事项管理器")
+        print("─" * 50)
+        
+        todo_file = "todos.json"
+        todos = []
+        
+        # Load existing todos
+        if os.path.exists(todo_file):
+            try:
+                with open(todo_file, 'r', encoding='utf-8') as f:
+                    todos = json.load(f)
+            except:
+                todos = []
+        
+        while True:
+            print("\n当前待办事项:")
+            if not todos:
+                print("  (空)")
+            else:
+                for i, todo in enumerate(todos, 1):
+                    status = "✓" if todo.get('done', False) else "○"
+                    print(f"  [{status}] {i}. {todo.get('text', '')}")
+            
+            print("\n操作:")
+            print("  1. 添加待办")
+            print("  2. 完成待办")
+            print("  3. 删除待办")
+            print("  4. 清空已完成")
+            print("  5. 返回上级")
+            
+            choice = input("\n选择操作：").strip()
+            
+            if choice == "1":
+                text = input("输入待办内容：").strip()
+                if text:
+                    todos.append({"text": text, "done": False, "created": datetime.datetime.now().strftime('%Y-%m-%d %H:%M')})
+                    print("✅ 已添加")
+            
+            elif choice == "2":
+                try:
+                    idx = int(input("输入要完成的待办编号：").strip()) - 1
+                    if 0 <= idx < len(todos):
+                        todos[idx]['done'] = True
+                        todos[idx]['completed'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+                        print("✅ 已标记为完成")
+                    else:
+                        print("❌ 无效的编号")
+                except ValueError:
+                    print("❌ 请输入数字")
+            
+            elif choice == "3":
+                try:
+                    idx = int(input("输入要删除的待办编号：").strip()) - 1
+                    if 0 <= idx < len(todos):
+                        del todos[idx]
+                        print("✅ 已删除")
+                    else:
+                        print("❌ 无效的编号")
+                except ValueError:
+                    print("❌ 请输入数字")
+            
+            elif choice == "4":
+                todos = [t for t in todos if not t.get('done', False)]
+                print("✅ 已清空已完成项")
+            
+            elif choice == "5":
+                break
+        
+        # Save todos
+        with open(todo_file, 'w', encoding='utf-8') as f:
+            json.dump(todos, f, ensure_ascii=False, indent=2)
+        print(f"\n💾 已保存到 {todo_file}")
+
+    def unit_converter(self):
+        """单位转换器"""
+        print("\n🔄 单位转换器")
+        print("─" * 50)
+        print("  1. 长度转换")
+        print("  2. 重量转换")
+        print("  3. 温度转换")
+        print("  4. 面积转换")
+        print("  5. 体积转换")
+        
+        choice = input("\n选择类型：").strip()
+        
+        try:
+            if choice == "1":
+                print("\n长度单位：m(米), km(千米), cm(厘米), mm(毫米), ft(英尺), in(英寸), mile(英里)")
+                value = float(input("输入数值：").strip())
+                from_unit = input("输入原单位：").strip().lower()
+                to_unit = input("输入目标单位：").strip().lower()
+                
+                to_meters = {'m': 1, 'km': 1000, 'cm': 0.01, 'mm': 0.001, 'ft': 0.3048, 'in': 0.0254, 'mile': 1609.34}
+                
+                if from_unit in to_meters and to_unit in to_meters:
+                    meters = value * to_meters[from_unit]
+                    result = meters / to_meters[to_unit]
+                    print(f"\n结果：{value} {from_unit} = {result:.6f} {to_unit}")
+                else:
+                    print("❌ 不支持的单位")
+            
+            elif choice == "2":
+                print("\n重量单位：kg(千克), g(克), mg(毫克), lb(磅), oz(盎司), ton(吨)")
+                value = float(input("输入数值：").strip())
+                from_unit = input("输入原单位：").strip().lower()
+                to_unit = input("输入目标单位：").strip().lower()
+                
+                to_grams = {'kg': 1000, 'g': 1, 'mg': 0.001, 'lb': 453.592, 'oz': 28.3495, 'ton': 1000000}
+                
+                if from_unit in to_grams and to_unit in to_grams:
+                    grams = value * to_grams[from_unit]
+                    result = grams / to_grams[to_unit]
+                    print(f"\n结果：{value} {from_unit} = {result:.6f} {to_unit}")
+                else:
+                    print("❌ 不支持的单位")
+            
+            elif choice == "3":
+                print("\n温度单位：c(摄氏度), f(华氏度), k(开尔文)")
+                value = float(input("输入数值：").strip())
+                from_unit = input("输入原单位：").strip().lower()
+                to_unit = input("输入目标单位：").strip().lower()
+                
+                if from_unit == 'c': celsius = value
+                elif from_unit == 'f': celsius = (value - 32) * 5/9
+                elif from_unit == 'k': celsius = value - 273.15
+                else:
+                    print("❌ 不支持的单位")
+                    return
+                
+                if to_unit == 'c': result = celsius
+                elif to_unit == 'f': result = celsius * 9/5 + 32
+                elif to_unit == 'k': result = celsius + 273.15
+                else:
+                    print("❌ 不支持的单位")
+                    return
+                
+                print(f"\n结果：{value}°{from_unit.upper()} = {result:.2f}°{to_unit.upper()}")
+            
+            elif choice == "4":
+                print("\n面积单位：m2(平方米), km2(平方千米), cm2(平方厘米), ft2(平方英尺), acre(英亩), ha(公顷)")
+                value = float(input("输入数值：").strip())
+                from_unit = input("输入原单位：").strip().lower()
+                to_unit = input("输入目标单位：").strip().lower()
+                
+                to_m2 = {'m2': 1, 'km2': 1e6, 'cm2': 0.0001, 'ft2': 0.092903, 'acre': 4046.86, 'ha': 10000}
+                
+                if from_unit in to_m2 and to_unit in to_m2:
+                    m2 = value * to_m2[from_unit]
+                    result = m2 / to_m2[to_unit]
+                    print(f"\n结果：{value} {from_unit} = {result:.6f} {to_unit}")
+                else:
+                    print("❌ 不支持的单位")
+            
+            elif choice == "5":
+                print("\n体积单位：l(升), ml(毫升), m3(立方米), gal(加仑), fl_oz(液量盎司)")
+                value = float(input("输入数值：").strip())
+                from_unit = input("输入原单位：").strip().lower()
+                to_unit = input("输入目标单位：").strip().lower()
+                
+                to_liters = {'l': 1, 'ml': 0.001, 'm3': 1000, 'gal': 3.78541, 'fl_oz': 0.0295735}
+                
+                if from_unit in to_liters and to_unit in to_liters:
+                    liters = value * to_liters[from_unit]
+                    result = liters / to_liters[to_unit]
+                    print(f"\n结果：{value} {from_unit} = {result:.6f} {to_unit}")
+                else:
+                    print("❌ 不支持的单位")
+        
+        except ValueError:
+            print("❌ 请输入有效的数字")
+        except Exception as e:
+            print(f"❌ 转换失败：{e}")
+
+    def regex_tester(self):
+        """正则表达式测试工具"""
+        print("\n🔍 正则表达式测试")
+        print("─" * 50)
+        
+        pattern = input("输入正则表达式：").strip()
+        test_text = input("输入测试文本：").strip()
+        
+        if not pattern or not test_text:
+            print("❌ 正则表达式和测试文本不能为空")
+            return
+        
+        try:
+            print("\n匹配结果:")
+            matches = re.findall(pattern, test_text)
+            if matches:
+                print(f"  找到 {len(matches)} 个匹配:")
+                for i, match in enumerate(matches, 1):
+                    if isinstance(match, tuple):
+                        print(f"    {i}. 组：{match}")
+                    else:
+                        print(f"    {i}. {match}")
+            else:
+                print("  未找到匹配")
+            
+            match = re.search(pattern, test_text)
+            if match:
+                print(f"\n首个匹配位置：[{match.start()}, {match.end()}]")
+                print(f"匹配内容：'{match.group()}'")
+                if match.groups():
+                    print(f"捕获组：{match.groups()}")
+            
+            replace = input("\n输入替换文本 (留空跳过): ").strip()
+            if replace:
+                result = re.sub(pattern, replace, test_text)
+                print(f"\n替换结果：{result}")
+        
+        except re.error as e:
+            print(f"❌ 正则表达式错误：{e}")
+        except Exception as e:
+            print(f"❌ 测试失败：{e}")
+
+    def file_splitter_merger(self):
+        """文件分割与合并工具"""
+        print("\n✂️ 文件分割与合并")
+        print("─" * 50)
+        print("  1. 分割文件")
+        print("  2. 合并文件")
+        
+        choice = input("\n选择操作：").strip()
+        
+        if choice == "1":
+            filepath = input("输入要分割的文件路径：").strip()
+            if not os.path.exists(filepath):
+                print("❌ 文件不存在")
+                return
+            
+            chunk_size = input("输入每块大小 (MB, 默认：10): ").strip() or "10"
+            chunk_size = int(chunk_size) * 1024 * 1024
+            
+            try:
+                file_size = os.path.getsize(filepath)
+                num_chunks = (file_size + chunk_size - 1) // chunk_size
+                
+                print(f"\n文件大小：{file_size / (1024*1024):.2f} MB")
+                print(f"将分割为 {num_chunks} 块")
+                
+                confirm = input("确认分割？(y/n): ").strip().lower()
+                if confirm != 'y':
+                    return
+                
+                base_name = filepath + ".part"
+                
+                with open(filepath, 'rb') as f:
+                    for i in range(num_chunks):
+                        chunk = f.read(chunk_size)
+                        part_file = f"{base_name}{i+1:03d}"
+                        with open(part_file, 'wb') as out_f:
+                            out_f.write(chunk)
+                        print(f"✅ 已创建 {part_file}")
+                
+                print(f"\n💾 合并脚本已保存：{filepath}.merge.py")
+            
+            except Exception as e:
+                print(f"❌ 分割失败：{e}")
+        
+        elif choice == "2":
+            folder = input("输入包含分块的文件夹路径 (默认：当前目录): ").strip() or "."
+            pattern = input("输入分块文件名模式 (例如：file.part): ").strip()
+            
+            try:
+                parts = sorted([f for f in os.listdir(folder) if f.startswith(pattern) and os.path.isfile(os.path.join(folder, f))])
+                
+                if not parts:
+                    print("❌ 未找到分块文件")
+                    return
+                
+                print(f"\n找到 {len(parts)} 个分块:")
+                for p in parts:
+                    print(f"  - {p}")
+                
+                output_file = input("\n输入输出文件名：").strip()
+                confirm = input("确认合并？(y/n): ").strip().lower()
+                
+                if confirm == 'y':
+                    with open(output_file, 'wb') as out_f:
+                        for part in parts:
+                            part_path = os.path.join(folder, part)
+                            with open(part_path, 'rb') as in_f:
+                                out_f.write(in_f.read())
+                            print(f"✅ 已读取 {part}")
+                    
+                    print(f"\n💾 合并完成：{output_file}")
+            
+            except Exception as e:
+                print(f"❌ 合并失败：{e}")
+
+    def system_monitor(self):
+        """系统资源监控"""
+        print("\n📊 系统资源监控")
+        print("─" * 50)
+        
+        try:
+            import psutil
+            
+            cpu_percent = psutil.cpu_percent(interval=1)
+            cpu_cores = psutil.cpu_count(logical=False)
+            cpu_threads = psutil.cpu_count(logical=True)
+            print(f"\n💻 CPU:")
+            print(f"  使用率：{cpu_percent}%")
+            print(f"  物理核心：{cpu_cores}")
+            print(f"  逻辑线程：{cpu_threads}")
+            
+            mem = psutil.virtual_memory()
+            print(f"\n🧠 内存:")
+            print(f"  总计：{mem.total / (1024**3):.2f} GB")
+            print(f"  已用：{mem.used / (1024**3):.2f} GB ({mem.percent}%)")
+            print(f"  可用：{mem.available / (1024**3):.2f} GB")
+            
+            print(f"\n💾 磁盘:")
+            partitions = psutil.disk_partitions()
+            for partition in partitions[:5]:
+                try:
+                    usage = psutil.disk_usage(partition.mountpoint)
+                    print(f"  {partition.device}: {usage.percent}% 已用 ({usage.free / (1024**3):.2f} GB 可用)")
+                except:
+                    pass
+            
+            print(f"\n🌐 网络:")
+            net_io = psutil.net_io_counters()
+            print(f"  发送：{net_io.bytes_sent / (1024**2):.2f} MB")
+            print(f"  接收：{net_io.bytes_recv / (1024**2):.2f} MB")
+            
+            print(f"\n⚙️ 占用 CPU 最多的进程:")
+            processes = []
+            for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
+                try:
+                    info = proc.info
+                    if info['cpu_percent'] is not None:
+                        processes.append(info)
+                except:
+                    pass
+            
+            processes.sort(key=lambda x: x.get('cpu_percent', 0) or 0, reverse=True)
+            for proc in processes[:5]:
+                print(f"  {proc.get('name', 'N/A'):20} CPU: {proc.get('cpu_percent', 0):5.1f}% 内存：{proc.get('memory_percent', 0):5.1f}%")
+        
+        except ImportError:
+            print("❌ 需要安装 psutil 库：pip install psutil")
+        except Exception as e:
+            print(f"❌ 监控失败：{e}")
 
 
 def main():
